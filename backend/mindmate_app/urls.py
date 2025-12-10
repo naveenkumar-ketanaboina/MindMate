@@ -4,7 +4,7 @@ from .views import *
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
-    path("health/", health_view.as_view(), name="health"),
+    path("health/", health_view, name="health"),
     path("flashcards/", FlashcardView.as_view(), name="flashcards"),
     path("summarize/", SummarizeView.as_view(), name="summarize"),
     path("upload-document/", DocumentUploadView.as_view(), name="upload-document"),
