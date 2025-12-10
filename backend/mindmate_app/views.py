@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,17 +11,17 @@ from django.db import models
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import *
 from .services import generate_flashcards, summarize_notes
+from django.http import JsonResponse
 
 from .serializers import *
 from .rag.document_loader import load_pdf_text
 from .rag.rag_service import *
 
 
-class HealthCheckView(APIView):
-    def get(self, request):
-        return Response({"status": "ok"}, status=status.HTTP_200_OK)
-
-
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def health_view(request):
+    return JsonResponse({"status": "ok"})
 class FlashcardView(APIView):
     def post(self, request):
         serializer = FlashcardRequestSerializer(data=request.data)

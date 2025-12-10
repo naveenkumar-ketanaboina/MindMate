@@ -2,11 +2,20 @@
 import os
 import json
 from dotenv import load_dotenv
+from typing import List, Dict, Any
 from groq import Groq
 
 load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+def get_groq_client() -> Groq | None:
+    """
+    Return a Groq client if GROQ_API_KEY is set. Otherwise return None.
+    This prevents import-time crashes on the server.
+    """
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        return None
+    return Groq(api_key=api_key)
 
 FLASHCARD_SYSTEM_PROMPT = """
 You are MindMate AI, an expert study assistant.
@@ -39,7 +48,7 @@ Difficulty: {difficulty}
 Notes:
 \"\"\"{notes}\"\"\"
 """
-
+    client = get_groq_client()
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
@@ -62,7 +71,7 @@ Summarize these notes for: {focus or 'general understanding'}
 Notes:
 \"\"\"{notes}\"\"\"
 """
-
+    client = get_groq_client()
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
