@@ -1,10 +1,20 @@
-sentence-transformers
-transformers
-accelerate
-bitsandbytes
-onnx
-onnxruntime
+# Core Django
+Django==6.0
+djangorestframework
+django-cors-headers
+
+# Env & HTTP
+python-dotenv
+requests
+
+# RAG / embeddings
+langchain
+langchain-community
+chromadb
+pypdf
+
+# Production server & static files
 gunicorn
 whitenoise
-psycopg2-binary
 dj-database-url
+psycopg2-binary
