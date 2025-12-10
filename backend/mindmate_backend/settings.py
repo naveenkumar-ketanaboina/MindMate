@@ -31,13 +31,13 @@ DATABASES = {
 }
 
 # If DATABASE_URL is set (Railway / production), override default
-DATABASE_URL = os.environ.get("DATABASE_URL")
-if DATABASE_URL:
-    DATABASES["default"] = dj_database_url.parse(
-        DATABASE_URL,
-        conn_max_age=600,
-        ssl_require=True,  # you can drop this locally if needed
-    )
+# DATABASE_URL = os.environ.get("DATABASE_URL")
+# if DATABASE_URL:
+#     DATABASES["default"] = dj_database_url.parse(
+#         DATABASE_URL,
+#         conn_max_age=600,
+#         ssl_require=True,  # you can drop this locally if needed
+#     )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
