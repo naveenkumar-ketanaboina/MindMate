@@ -7,3 +7,7 @@ accelerate
 bitsandbytes
 onnx
 onnxruntime
+gunicorn
+whitenoise
+psycopg2-binary
+dj-database-url
