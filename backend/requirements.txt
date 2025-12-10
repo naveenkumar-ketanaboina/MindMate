@@ -2,10 +2,12 @@
 Django==6.0
 djangorestframework
 django-cors-headers
+djangorestframework-simplejwt
 
 # Env & HTTP
 python-dotenv
 requests
+groq
 
 # RAG / embeddings
 langchain
