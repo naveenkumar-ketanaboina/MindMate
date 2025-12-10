@@ -1,0 +1,33 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Treat these as text
+*.py  text
+*.js  text
+*.jsx text
+*.ts  text
+*.tsx text
+*.json text
+*.yml text
+*.yaml text
+*.css text
+*.html text
+*.md  text
+
+# Images as binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+
+# Improve GitHub language stats
+backend/** linguist-language=Python
+frontend/** linguist-language=JavaScript
+
+# Keep lockfiles as text
+package-lock.json text
+pnpm-lock.yaml   text
+yarn.lock        text
+requirements.txt text

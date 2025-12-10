@@ -1,0 +1,9 @@
+torch
+torchvision
+torchaudio
+sentence-transformers
+transformers
+accelerate
+bitsandbytes
+onnx
+onnxruntime
