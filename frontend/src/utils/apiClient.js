@@ -7,6 +7,7 @@ const baseURL =
 const apiClient = axios.create({
   baseURL,
 });
+console.log("API_BASE_URL =", baseURL);
 
 // Attach Authorization header automatically if token exists
 apiClient.interceptors.request.use(
