@@ -18,6 +18,15 @@ from .rag.document_loader import load_pdf_text
 from .rag.rag_service import *
 
 
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+
+
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def health_view(request):
@@ -257,6 +266,67 @@ class RegisterView(APIView):
                 {"detail": "Server error", "error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+@csrf_exempt
+def register_view(request):
+    """
+    Plain Django registration endpoint.
+
+    POST /api/auth/register/
+    Body:
+    {
+        "username": "test123",
+        "email": "test@example.com",
+        "password": "testpass123"
+    }
+    """
+    if request.method != "POST":
+        return JsonResponse({"detail": "Method not allowed"}, status=405)
+
+    try:
+        # Parse JSON body safely
+        try:
+            data = json.loads(request.body.decode("utf-8") or "{}")
+        except json.JSONDecodeError:
+            return JsonResponse({"detail": "Invalid JSON body"}, status=400)
+
+        username = data.get("username")
+        email = data.get("email", "")
+        password = data.get("password")
+
+        if not username or not password:
+            return JsonResponse(
+                {"detail": "Username and password are required."},
+                status=400,
+            )
+
+        # Ensure username is unique
+        if User.objects.filter(username=username).exists():
+            return JsonResponse(
+                {"detail": "Username already taken."},
+                status=400,
+            )
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+
+        return JsonResponse(
+            {
+                "message": "User registered successfully",
+                "user": {"id": user.id, "username": user.username},
+            },
+            status=201,
+        )
+
+    except Exception as e:
+        # TEMP: show real error instead of blank 500 so we can debug
+        return JsonResponse(
+            {"detail": "Server error", "error": str(e)},
+            status=500,
+        )
 
 
 class LoginView(APIView):

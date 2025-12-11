@@ -3,15 +3,18 @@ from django.urls import path
 from .views import *
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from . import views
+
 urlpatterns = [
     path("health/", health_view, name="health"),
+    path("auth/register/", views.register_view, name="register"),
     path("flashcards/", FlashcardView.as_view(), name="flashcards"),
     path("summarize/", SummarizeView.as_view(), name="summarize"),
     path("upload-document/", DocumentUploadView.as_view(), name="upload-document"),
     path("explain/", ExplainView.as_view(), name="explain"),
     path("quiz-me/", QuizMeView.as_view(), name="quiz-me"),
     # Auth
-    path("auth/register/", RegisterView.as_view(), name="register"),
+    # path("auth/register/", RegisterView.as_view(), name="register"),
     path("auth/login/", LoginView.as_view(), name="login"),
     path("auth/me/", MeView.as_view(), name="me"),
     # Planner
