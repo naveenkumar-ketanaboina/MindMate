@@ -217,25 +217,46 @@ class RegisterView(APIView):
     Create a new user account and return JWT tokens.
     """
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            username = request.data.get("username")
+            email = request.data.get("email", "")
+            password = request.data.get("password")
 
-        user = serializer.save()
+            # basic validation
+            if not username or not password:
+                return Response(
+                    {"detail": "Username and password are required."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        refresh = RefreshToken.for_user(user)
-        return Response(
-            {
-                "user": {
-                    "id": user.id,
-                    "username": user.username,
-                    "email": user.email,
+            # username already exists?
+            if User.objects.filter(username=username).exists():
+                return Response(
+                    {"detail": "Username already taken."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # create user
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+            )
+
+            return Response(
+                {
+                    "message": "User registered successfully",
+                    "user": {"id": user.id, "username": user.username},
                 },
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
-            },
-            status=status.HTTP_201_CREATED,
-        )
+                status=status.HTTP_201_CREATED,
+            )
+
+        except Exception as e:
+            # TEMPORARY: lets us see the real error instead of a blank 500 page
+            return Response(
+                {"detail": "Server error", "error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 
 class LoginView(APIView):

@@ -19,9 +19,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")  # will override in prod
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "melodious-hope-production.up.railway.app"]
 
-import dj_database_url
 
 DATABASES = {
     "default": {
